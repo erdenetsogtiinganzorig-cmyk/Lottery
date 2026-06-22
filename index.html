@@ -290,6 +290,28 @@
     .ticket-footer .amt { font-weight: 600; color: var(--text); }
 
     /* ── Footer ── */
+    .info-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 13px;
+      border-radius: 10px;
+      text-decoration: none;
+      margin-bottom: 20px;
+      transition: border-color .2s, color .2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .info-btn:hover, .info-btn:active {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
     footer {
       margin-top: 32px;
       margin-bottom: env(safe-area-inset-bottom, 0px);
@@ -309,7 +331,7 @@
       Аялалдаа бэлд, Азтан бол 2026
     </div>
     <h1>Сугалааны<br>дугаар <em>шалгах</em></h1>
-    <p>Утасны дугаараа оруулж таны<br>сугалааны мэдээллийг шалгана уу.</p>
+
   </div>
 
   <div class="card">
@@ -322,6 +344,10 @@
     </div>
     <button id="searchBtn" onclick="search()">Шалгах</button>
   </div>
+
+  <a href="https://www.market.mn/promo-campaign-temp.pdf" target="_blank" class="info-btn">
+    📄 Мэдээлэл харах
+  </a>
 
   <div class="status">
     <div class="spinner" id="spinner"></div>
