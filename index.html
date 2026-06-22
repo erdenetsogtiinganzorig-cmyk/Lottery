@@ -290,27 +290,43 @@
     .ticket-footer .amt { font-weight: 600; color: var(--text); }
 
     /* ── Footer ── */
+    .info-section {
+      width: 100%;
+      margin-top: 28px;
+      margin-bottom: 8px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .info-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 14px;
+    }
     .info-btn {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       width: 100%;
       text-align: center;
-      background: transparent;
-      border: 1.5px solid var(--border);
-      color: var(--muted);
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      padding: 13px;
+      background: linear-gradient(135deg, rgba(232,160,32,.15), rgba(232,160,32,.05));
+      border: 1.5px solid var(--gold-dim);
+      color: var(--gold);
+      font-family: 'Geologica', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 15px;
       border-radius: 10px;
       text-decoration: none;
-      margin-bottom: 20px;
-      transition: border-color .2s, color .2s;
+      transition: background .2s, border-color .2s, transform .1s;
       -webkit-tap-highlight-color: transparent;
     }
-    .info-btn:hover, .info-btn:active {
-      border-color: var(--gold);
-      color: var(--gold);
-    }
+    .info-btn:hover { background: rgba(232,160,32,.22); border-color: var(--gold); }
+    .info-btn:active { transform: scale(.98); }
 
     footer {
       margin-top: 32px;
@@ -345,9 +361,12 @@
     <button id="searchBtn" onclick="search()">Шалгах</button>
   </div>
 
-  <a href="https://www.market.mn/promo-campaign-temp.pdf" target="_blank" class="info-btn">
-    📄 Мэдээлэл харах
-  </a>
+  <div class="info-section">
+    <div class="info-label">Сугалаат хөтөлбөрийн дэлгэрэнгүй мэдээлэл</div>
+    <a href="https://www.market.mn/promo-campaign-temp.pdf" target="_blank" class="info-btn">
+      📄 Мэдээлэл харах
+    </a>
+  </div>
 
   <div class="status">
     <div class="spinner" id="spinner"></div>
