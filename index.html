@@ -2,7 +2,7 @@
 <html lang="mn">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Сугалааны дугаар шалгах — Market.mn</title>
   <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;600;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <style>
@@ -40,7 +40,7 @@
       width: 100%;
       max-width: 480px;
       text-align: center;
-      padding: 52px 0 36px;
+      padding: 36px 0 24px;
     }
     .hero-badge {
       display: inline-flex;
@@ -92,8 +92,8 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 28px 24px;
-      margin-bottom: 24px;
+      padding: 20px 18px;
+      margin-bottom: 20px;
     }
     .input-wrap {
       position: relative;
@@ -115,11 +115,12 @@
       border-radius: 10px;
       color: var(--text);
       font-family: 'Inter', sans-serif;
-      font-size: 17px;
+      font-size: 16px;
       letter-spacing: .04em;
-      padding: 14px 16px 14px 44px;
+      padding: 16px 16px 16px 46px;
       outline: none;
       transition: border-color .2s;
+      -webkit-appearance: none;
     }
     input[type="tel"]:focus { border-color: var(--gold); }
     input[type="tel"]::placeholder { color: var(--muted); font-size: 14px; letter-spacing: 0; }
@@ -129,13 +130,15 @@
       background: var(--gold);
       color: #000;
       font-family: 'Geologica', sans-serif;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 700;
       border: none;
       border-radius: 10px;
-      padding: 15px;
+      padding: 17px;
       cursor: pointer;
       transition: opacity .2s, transform .1s;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     button:hover { opacity: .9; }
     button:active { transform: scale(.98); }
@@ -204,8 +207,8 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 20px;
-      margin-bottom: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
       position: relative;
       overflow: hidden;
     }
@@ -248,9 +251,9 @@
     }
     .num {
       font-family: 'Geologica', sans-serif;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
-      padding: 6px 14px;
+      padding: 7px 13px;
       border-radius: 8px;
       letter-spacing: .04em;
     }
@@ -281,7 +284,8 @@
 
     /* ── Footer ── */
     footer {
-      margin-top: 40px;
+      margin-top: 32px;
+      margin-bottom: env(safe-area-inset-bottom, 0px);
       text-align: center;
       font-size: 12px;
       color: var(--muted);
