@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сугалааны дугаар шалгах — Market.mn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;600;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ── Tokens ── */
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --gold:      #e8a020;
+      --gold-dim:  #7a5210;
+      --valid:     #2ea84f;
+      --valid-bg:  #0d2e1a;
+      --invalid:   #e74c3c;
+      --invalid-bg:#2d0f0f;
+      --text:      #e6edf3;
+      --muted:     #7d8590;
+      --radius:    14px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 16px 60px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      padding: 52px 0 36px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(232,160,32,.12);
+      border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 99px;
+      margin-bottom: 22px;
+    }
+    .hero-badge .dot {
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: .4; transform: scale(.7); }
+    }
+    .hero h1 {
+      font-family: 'Geologica', sans-serif;
+      font-size: clamp(26px, 6vw, 36px);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -.02em;
+      margin-bottom: 10px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--gold);
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── Search card ── */
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      margin-bottom: 24px;
+    }
+    .input-wrap {
+      position: relative;
+      margin-bottom: 14px;
+    }
+    .input-wrap .icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 16px;
+      pointer-events: none;
+    }
+    input[type="tel"] {
+      width: 100%;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      letter-spacing: .04em;
+      padding: 14px 16px 14px 44px;
+      outline: none;
+      transition: border-color .2s;
+    }
+    input[type="tel"]:focus { border-color: var(--gold); }
+    input[type="tel"]::placeholder { color: var(--muted); font-size: 14px; letter-spacing: 0; }
+
+    button {
+      width: 100%;
+      background: var(--gold);
+      color: #000;
+      font-family: 'Geologica', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      padding: 15px;
+      cursor: pointer;
+      transition: opacity .2s, transform .1s;
+    }
+    button:hover { opacity: .9; }
+    button:active { transform: scale(.98); }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+
+    /* ── States ── */
+    .status {
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      min-height: 48px;
+    }
+    .spinner {
+      display: none;
+      width: 32px; height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-msg {
+      background: var(--invalid-bg);
+      border: 1px solid var(--invalid);
+      color: var(--invalid);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 14px;
+      display: none;
+    }
+    .not-found {
+      color: var(--muted);
+      font-size: 14px;
+      padding: 16px 0;
+      display: none;
+    }
+
+    /* ── Results ── */
+    .results { width: 100%; max-width: 480px; display: none; }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .result-header h2 {
+      font-family: 'Geologica', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .total-badge {
+      background: rgba(232,160,32,.15);
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 99px;
+      border: 1px solid var(--gold-dim);
+    }
+
+    /* ── Ticket card ── */
+    .ticket {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .ticket::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--gold);
+      border-radius: 4px 0 0 4px;
+    }
+    .ticket.has-invalid::before { background: linear-gradient(var(--valid), var(--invalid)); }
+    .ticket.all-invalid::before { background: var(--invalid); }
+
+    .ticket-date {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: .04em;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+
+    /* Ticket number groups */
+    .ticket-group { margin-bottom: 12px; }
+    .ticket-group:last-child { margin-bottom: 0; }
+    .group-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .group-label.valid   { color: var(--valid); }
+    .group-label.invalid { color: var(--invalid); }
+
+    .nums-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .num {
+      font-family: 'Geologica', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 8px;
+      letter-spacing: .04em;
+    }
+    .num.valid {
+      background: var(--valid-bg);
+      color: var(--valid);
+      border: 1px solid rgba(46,168,79,.3);
+    }
+    .num.invalid {
+      background: var(--invalid-bg);
+      color: var(--invalid);
+      border: 1px solid rgba(231,76,60,.3);
+      text-decoration: line-through;
+      opacity: .7;
+    }
+
+    .ticket-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .ticket-footer .amt { font-weight: 600; color: var(--text); }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer a { color: var(--gold); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Аялалдаа бэлд, Азтан бол 2026
+    </div>
+    <h1>Сугалааны<br>дугаар <em>шалгах</em></h1>
+    <p>Утасны дугаараа оруулж таны<br>сугалааны мэдээллийг шалгана уу.</p>
+  </div>
+
+  <div class="card">
+    <div class="input-wrap">
+      <span class="icon">📱</span>
+      <input type="tel" id="phoneInput"
+             placeholder="Утасны дугаар (жишээ: 99001122)"
+             maxlength="12"
+             inputmode="numeric">
+    </div>
+    <button id="searchBtn" onclick="search()">Шалгах</button>
+  </div>
+
+  <div class="status">
+    <div class="spinner" id="spinner"></div>
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="not-found" id="notFound">
+      😕 Энэ дугаартай сугалааны бүртгэл олдсонгүй.<br>
+      <small>Худалдан авалт хийсэн утасны дугаараа шалгана уу.</small>
+    </div>
+  </div>
+
+  <div class="results" id="results">
+    <div class="result-header">
+      <h2>Таны сугалаанууд</h2>
+      <span class="total-badge" id="totalBadge"></span>
+    </div>
+    <div id="ticketList"></div>
+  </div>
+
+  <footer>
+    <p>© 2026 <a href="https://market.mn" target="_blank">Market.mn</a> · CampproX</p>
+  </footer>
+
+<script>
+  // ⬇️ ЭНЭ URL-ИЙГ APPS SCRIPT WEB APP URL-ААР СОЛИНО
+  const API_URL = 'https://script.google.com/macros/s/AKfycby1HJFiS5NPMx1A0Hah5IXNkZhVB5Qd7sRk_a3RZnQmbU13nVICt8AOfAwlSlTrebXRdQ/exec';
+
+  const phoneInput = document.getElementById('phoneInput');
+  const searchBtn  = document.getElementById('searchBtn');
+  const spinner    = document.getElementById('spinner');
+  const errorMsg   = document.getElementById('errorMsg');
+  const notFound   = document.getElementById('notFound');
+  const results    = document.getElementById('results');
+  const ticketList = document.getElementById('ticketList');
+  const totalBadge = document.getElementById('totalBadge');
+
+  phoneInput.addEventListener('keydown', e => { if (e.key === 'Enter') search(); });
+
+  function fmt(n) {
+    return Number(n).toLocaleString('mn-MN') + '₮';
+  }
+
+  function showOnly(el) {
+    [spinner, errorMsg, notFound, results].forEach(e => {
+      e.style.display = 'none';
+    });
+    if (el) el.style.display = el === results ? 'block' : 
+              el === spinner ? 'block' : 
+              'block';
+  }
+
+  async function search() {
+    const phone = phoneInput.value.trim().replace(/\s+/g, '');
+    if (!phone || phone.length < 8) {
+      errorMsg.textContent = 'Утасны дугаараа зөв оруулна уу.';
+      showOnly(errorMsg);
+      return;
+    }
+
+    showOnly(spinner);
+    searchBtn.disabled = true;
+
+    try {
+      const res  = await fetch(`${API_URL}?phone=${encodeURIComponent(phone)}`);
+      const data = await res.json();
+
+      if (data.error) {
+        errorMsg.textContent = data.error;
+        showOnly(errorMsg);
+        return;
+      }
+
+      if (!data.found || data.records.length === 0) {
+        showOnly(notFound);
+        return;
+      }
+
+      renderResults(data.records);
+
+    } catch (err) {
+      errorMsg.textContent = 'Сервертэй холбогдоход алдаа гарлаа. Дахин оролдоно уу.';
+      showOnly(errorMsg);
+    } finally {
+      searchBtn.disabled = false;
+    }
+  }
+
+  function renderResults(records) {
+    ticketList.innerHTML = '';
+
+    // Нийт хүчинтэй сугалааны тоо
+    let totalValid = 0;
+    records.forEach(r => {
+      const vNums = r.validNums ? r.validNums.split(',').filter(s => s.trim()) : [];
+      totalValid += vNums.length;
+    });
+    totalBadge.textContent = `Нийт ${totalValid} сугалаа`;
+
+    records.forEach(r => {
+      const vNums = r.validNums   ? r.validNums.split(',').map(s => s.trim()).filter(Boolean)   : [];
+      const iNums = r.invalidNums ? r.invalidNums.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+      const allInvalid = vNums.length === 0 && iNums.length > 0;
+      const hasInvalid = iNums.length > 0;
+
+      const card = document.createElement('div');
+      card.className = `ticket${allInvalid ? ' all-invalid' : hasInvalid ? ' has-invalid' : ''}`;
+
+      // Огноо
+      const dateEl = document.createElement('div');
+      dateEl.className = 'ticket-date';
+      dateEl.textContent = r.date || '—';
+      card.appendChild(dateEl);
+
+      // Хүчинтэй дугаарууд
+      if (vNums.length > 0) {
+        const g = document.createElement('div');
+        g.className = 'ticket-group';
+        g.innerHTML = `<div class="group-label valid">✅ Хүчинтэй дугаар</div>
+          <div class="nums-wrap">${vNums.map(n => `<span class="num valid">${n}</span>`).join('')}</div>`;
+        card.appendChild(g);
+      }
+
+      // Хүчингүй дугаарууд
+      if (iNums.length > 0) {
+        const g = document.createElement('div');
+        g.className = 'ticket-group';
+        g.innerHTML = `<div class="group-label invalid">❌ Хүчингүй дугаар</div>
+          <div class="nums-wrap">${iNums.map(n => `<span class="num invalid">${n}</span>`).join('')}</div>`;
+        card.appendChild(g);
+      }
+
+      // Footer
+      const footer = document.createElement('div');
+      footer.className = 'ticket-footer';
+      footer.innerHTML = `<span>Худалдан авалтын дүн</span>
+        <span class="amt">${fmt(r.amount)}</span>`;
+      card.appendChild(footer);
+
+      ticketList.appendChild(card);
+    });
+
+    showOnly(results);
+  }
+</script>
+</body>
+</html>
