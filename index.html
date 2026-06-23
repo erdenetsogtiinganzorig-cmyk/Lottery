@@ -52,30 +52,13 @@
       text-align: center;
       padding: 36px 0 24px;
     }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      background: rgba(232,160,32,.12);
-      border: 1px solid var(--gold-dim);
-      color: var(--gold);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: 5px 14px;
-      border-radius: 99px;
-      margin-bottom: 22px;
-    }
-    .hero-badge .dot {
-      width: 6px; height: 6px;
-      background: var(--gold);
-      border-radius: 50%;
-      animation: pulse 1.6s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%,100% { opacity: 1; transform: scale(1); }
-      50%      { opacity: .4; transform: scale(.7); }
+    .hero-logo {
+      width: 160px;
+      height: auto;
+      margin-bottom: 20px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
     .hero h1 {
       font-family: 'Geologica', sans-serif;
@@ -456,12 +439,12 @@
     <button id="searchBtn" onclick="search()">Шалгах</button>
   </div>
 
-  <div class="info-section">
-    <div class="info-label">Сугалаат хөтөлбөрийн дэлгэрэнгүй мэдээлэл</div>
-    <a href="https://www.market.mn/promo-campaign-temp.pdf" target="_blank" class="info-btn">
-      📄 Мэдээлэл харах
-    </a>
+  <div class="products-section" id="productsSection">
+    <div class="section-title">⛺ Онцлох бүтээгдэхүүн</div>
+    <div class="products-grid" id="productsGrid"></div>
   </div>
+
+
 
   <div class="status">
     <div class="spinner" id="spinner"></div>
@@ -479,10 +462,6 @@
     </div>
     <div id="ticketList"></div>
 
-    <div class="products-section" id="productsSection" style="display:none; margin-top:28px;">
-      <div class="section-title">⛺ Онцлох бүтээгдэхүүн</div>
-      <div class="products-grid" id="productsGrid"></div>
-    </div>
   </div>
 
   </div><!-- /main-wrap -->
@@ -504,6 +483,16 @@
   const totalBadge = document.getElementById('totalBadge');
 
   phoneInput.addEventListener('keydown', e => { if (e.key === 'Enter') search(); });
+
+  // Хуудас нээхэд бүтээгдэхүүн татна
+  async function loadProducts() {
+    try {
+      const res  = await fetch(`${API_URL}?phone=__products_only__`);
+      const data = await res.json();
+      renderProducts(data.products);
+    } catch(e) {}
+  }
+  loadProducts();
 
   function fmt(n) {
     return Number(n).toLocaleString('mn-MN') + '₮';
